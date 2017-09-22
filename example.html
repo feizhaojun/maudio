@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+<title>mAudio</title>
+<link rel="stylesheet" type="text/css" href="./audio.css">
+</head>
+<body>
+<div class="maudio">
+    <audio src="http://fptest.staff.xdf.cn/upload/midwkTest/1505985982445340.mp3"></audio>
+    <div class="audio-control">
+        <a href="javascript:;" class="fast-reverse"></a>
+        <a href="javascript:;" class="play"></a>
+        <a href="javascript:;" class="fast-forward"></a>
+        <div class="progress-bar">
+            <div class="progress-pass"></div>
+        </div>
+        <div class="time-keep">
+            <span class="current-time"></span> /
+            <span class="duration"></span>
+        </div>
+        <a class="mute"></a>
+        <div class="volume-bar">
+            <div class="volume-pass"></div>
+        </div>
+    </div>
+</div>
+ 
+<script src="./maudio.js"></script>
+<script>
+    var 
+    maudio.init();
+</script>
+</body>
+</html>
