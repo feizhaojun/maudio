@@ -4,6 +4,8 @@ HTML5音频播放器
 
 支持 IE9+、Edge、Firefox20+、Chrome、Opera、Safari4+
 
+示例：[https://feizhaojun.com/sample/maudio](https://feizhaojun.com/sample/maudio)
+
 # 主要功能
 
 基本的音频播放控制
