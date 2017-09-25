@@ -1,5 +1,40 @@
+function maudio(_opt){
+  var opt = {
+    obj : _opt.obj ? _opt.obj : 'audio',
+    fastStep : _opt.fastStep ? _opt.fastStep : 10
+  }
+  opt.tpl = '\
+    <div class="maudio">\
+      <audio src="%audioSource%"></audio>\
+      <div class="audio-control">\
+          <a href="javascript:;" class="fast-reverse"></a>\
+          <a href="javascript:;" class="play"></a>\
+          <a href="javascript:;" class="fast-forward"></a>\
+          <div class="progress-bar">\
+              <div class="progress-pass"></div>\
+          </div>\
+          <div class="time-keep">\
+              <span class="current-time">00:00</span> / <span class="duration">00:00</span>\
+          </div>\
+          <a class="mute"></a>\
+          <div class="volume-bar">\
+              <div class="volume-pass"></div>\
+          </div>\
+      </div>\
+    </div>';
+  // var currentAudio,currentAudioBox;
 
-  var currentAudio,currentAudioBox;
+  // 初始化所有音频
+  $(opt.obj).each(function(){
+    $(this).before(opt.tpl.replace('%audioSource%',$(this).attr('src')));
+    var thisBox = $(this).prev('div.maudio');
+    var thisAudio = thisBox.children('audio')[0];
+    $(this).remove();
+    setTimeout(function(){
+      thisBox.find('.time-keep .duration').text(timeFormat(thisAudio.duration));
+    },1000);
+  });
+
   function progressBar(audio,pgp){
     var p = 100*currentAudio.currentTime/currentAudio.duration;
     currentAudioBox.find('.progress-pass').css({'width':p + '%'});
@@ -11,23 +46,11 @@
       clearInterval(t);
     }
   }
-  // 时间换算成“00:00”格式
-  function timeFormat(sec){
-    var m = parseInt(sec/60);
-    var s = parseInt(sec%60);
-    return (m < 10 ?  '0' + m : m)+ ':' + (s < 10 ?  '0' + s : s);
-  }
-  // 1000ms后初始化所有音频
-  setTimeout(function(){
-    $('.audio').each(function(){
-      thisAudio = $(this).find('audio')[0];
-      $(this).find('.time-keep .duration').text(timeFormat(thisAudio.duration));
-    });
-  },1000);
 
   function bindAudioCtrl(){
+    // 播放
     $('.audio-control .play').on('click', function(){
-      var audioBox = $(this).parent('.audio-control').parent('.audio');
+      var audioBox = $(this).parent('.audio-control').parent('.maudio');
       var audio = audioBox.children('audio')[0];
       if(audioBox.hasClass('playing')){
         audio.pause();
@@ -48,21 +71,25 @@
         },500);
       }
     });
+    // 快进
     $('.audio-control .fast-reverse').on('click', function(){
-      currentAudio.currentTime -= 10;
+      currentAudio.currentTime -= opt.fastStep;
     });
+    // 快退
     $('.audio-control .fast-forward').on('click', function(){
-      currentAudio.currentTime += 10;
+      currentAudio.currentTime += opt.fastStep;
     });
+    // 音量
     $('.audio-control .volume-bar').on('click', function(e){
-      var audioBox = $(this).parent('.audio-control').parent('.audio');
+      var audioBox = $(this).parent('.audio-control').parent('.maudio');
       var audio = audioBox.children('audio')[0];
       var p = e.offsetX / audioBox.find('.volume-bar').width();
       audioBox.find('.volume-pass').css({"width":p * 100 + '%'});
       audio.volume = p > 1 ? 1 : p;
     });
+    // 静音
     $('.audio-control .mute').on('click', function(e){
-      var audioBox = $(this).parent('.audio-control').parent('.audio');
+      var audioBox = $(this).parent('.audio-control').parent('.maudio');
       var audio = audioBox.children('audio')[0];
       if($(this).hasClass('muted')){
         audio.muted = false;
@@ -72,8 +99,9 @@
         $(this).addClass('muted');
       }
     });
+    // 进度条
     $('.audio-control .progress-bar').on('click', function(e){
-      var audioBox = $(this).parent('.audio-control').parent('.audio');
+      var audioBox = $(this).parent('.audio-control').parent('.maudio');
       var audio = audioBox.children('audio')[0];
       var p = e.offsetX / audioBox.find('.progress-bar').width();
       audioBox.find('.progress-pass').css({"width":p * 100 + '%'});
@@ -82,3 +110,12 @@
       audioBox.find('.current-time').text(timeFormat(audio.currentTime));
     });
   }
+  bindAudioCtrl();
+
+  // 时间换算成“00:00”格式
+  function timeFormat(sec){
+    var m = parseInt(sec/60);
+    var s = parseInt(sec%60);
+    return (m < 10 ?  '0' + m : m)+ ':' + (s < 10 ?  '0' + s : s);
+  }
+}

@@ -3,33 +3,21 @@
 <head>
 <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
 <title>mAudio</title>
-<link rel="stylesheet" type="text/css" href="./audio.css">
+<link rel="stylesheet" type="text/css" href="./css/maudio.css">
 </head>
 <body>
-<div class="maudio">
-    <audio src="http://fptest.staff.xdf.cn/upload/midwkTest/1505985982445340.mp3"></audio>
-    <div class="audio-control">
-        <a href="javascript:;" class="fast-reverse"></a>
-        <a href="javascript:;" class="play"></a>
-        <a href="javascript:;" class="fast-forward"></a>
-        <div class="progress-bar">
-            <div class="progress-pass"></div>
-        </div>
-        <div class="time-keep">
-            <span class="current-time"></span> /
-            <span class="duration"></span>
-        </div>
-        <a class="mute"></a>
-        <div class="volume-bar">
-            <div class="volume-pass"></div>
-        </div>
-    </div>
-</div>
- 
-<script src="./maudio.js"></script>
+
+<audio src="https://mycugb.com/17ing/music/17ing_biyebushuozaijian.mp3"></audio>
+<audio src="https://mycugb.com/17ing/music/yc_yixin_yunkaiwusan.mp3"></audio>
+<audio src="https://mycugb.com/17ing/music/17ing_20130508.mp3"></audio>
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="./js/maudio.js"></script>
 <script>
-    var 
-    maudio.init();
+    maudio({
+        obj:'audio', // 需要初始化的audio标签，可以使用jQuery选择器，默认值 'audio'，即所有的auido标签
+        fastStep:10 // 快进、快退每次跳跃的秒数，默认值 10
+    });
 </script>
 </body>
 </html>
