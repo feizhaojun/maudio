@@ -25,14 +25,18 @@ function maudio(_opt){
   // var currentAudio,currentAudioBox;
 
   // 初始化所有音频
-  $(opt.obj).each(function(){
+  window.tDuration = [];
+  $(opt.obj).each(function(i){
     $(this).before(opt.tpl.replace('%audioSource%',$(this).attr('src')));
     var thisBox = $(this).prev('div.maudio');
     var thisAudio = thisBox.children('audio')[0];
     $(this).remove();
-    setTimeout(function(){
-      thisBox.find('.time-keep .duration').text(timeFormat(thisAudio.duration));
-    },1000);
+    window.tDuration[i] = setInterval(function(){
+      if(thisAudio.duration){
+        thisBox.find('.time-keep .duration').text(timeFormat(thisAudio.duration));
+        clearInterval(window.tDuration);
+      }
+    },100);
   });
 
   function progressBar(audio,pgp){
