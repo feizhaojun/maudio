@@ -24,10 +24,12 @@ function maudio(_opt){
     </div>';
   // var currentAudio,currentAudioBox;
 
+  var thisWindow = $(opt.obj).parents(window);
+
   // 初始化所有音频
   window.tDuration = [];
   $(opt.obj).each(function(i){
-    $(this).before(opt.tpl.replace('%audioSource%',$(this).attr('src')));
+    $(this).before(opt.tpl.replace('%audioSource%',($(this).attr('src') || $(this).children('source').attr('src'))));
     var thisBox = $(this).prev('div.maudio');
     var thisAudio = thisBox.children('audio')[0];
     $(this).remove();
@@ -53,7 +55,7 @@ function maudio(_opt){
 
   function bindAudioCtrl(){
     // 播放
-    $('.audio-control .play').on('click', function(){
+    $(thisWindow).find('.audio-control .play').on('click', function(){
       var audioBox = $(this).parent('.audio-control').parent('.maudio');
       var audio = audioBox.children('audio')[0];
       if(audioBox.hasClass('playing')){
@@ -61,7 +63,7 @@ function maudio(_opt){
         audioBox.removeClass('playing');
       }else{
         // 停止其他语音播放
-        $('.playing').each(function(){
+        $(thisWindow).find('.playing').each(function(){
           $(this).children('audio')[0].pause();
           $(this).removeClass('playing');
         });
@@ -76,15 +78,15 @@ function maudio(_opt){
       }
     });
     // 快进
-    $('.audio-control .fast-reverse').on('click', function(){
+    $(thisWindow).find('.audio-control .fast-reverse').on('click', function(){
       currentAudio.currentTime -= opt.fastStep;
     });
     // 快退
-    $('.audio-control .fast-forward').on('click', function(){
+    $(thisWindow).find('.audio-control .fast-forward').on('click', function(){
       currentAudio.currentTime += opt.fastStep;
     });
     // 音量
-    $('.audio-control .volume-bar').on('click', function(e){
+    $(thisWindow).find('.audio-control .volume-bar').on('click', function(e){
       var audioBox = $(this).parent('.audio-control').parent('.maudio');
       var audio = audioBox.children('audio')[0];
       var p = e.offsetX / audioBox.find('.volume-bar').width();
@@ -92,7 +94,7 @@ function maudio(_opt){
       audio.volume = p > 1 ? 1 : p;
     });
     // 静音
-    $('.audio-control .mute').on('click', function(e){
+    $(thisWindow).find('.audio-control .mute').on('click', function(e){
       var audioBox = $(this).parent('.audio-control').parent('.maudio');
       var audio = audioBox.children('audio')[0];
       if($(this).hasClass('muted')){
@@ -104,7 +106,7 @@ function maudio(_opt){
       }
     });
     // 进度条
-    $('.audio-control .progress-bar').on('click', function(e){
+    $(thisWindow).find('.audio-control .progress-bar').on('click', function(e){
       var audioBox = $(this).parent('.audio-control').parent('.maudio');
       var audio = audioBox.children('audio')[0];
       var p = e.offsetX / audioBox.find('.progress-bar').width();
