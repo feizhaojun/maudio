@@ -21,3 +21,7 @@ maudio() 目前支持两个配置项：
         obj:'audio', // 需要初始化的audio标签，可以使用jQuery选择器，默认值 'audio'，即所有的auido标签
         fastStep:10 // 快进、快退每次跳跃的秒数，默认值 10
     });
+
+# Bug
+
+重复初始化问题

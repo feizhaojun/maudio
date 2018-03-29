@@ -5,7 +5,7 @@ function maudio(_opt){
   }
   opt.tpl = '\
     <div class="maudio">\
-      <audio src="%audioSource%"></audio>\
+      <audio src="%audioSource%" initaudio="false"></audio>\
       <div class="audio-control">\
           <a href="javascript:;" class="fast-reverse"></a>\
           <a href="javascript:;" class="play"></a>\
@@ -27,18 +27,18 @@ function maudio(_opt){
   var thisWindow = $(opt.obj).parents(window);
 
   // 初始化所有音频
-  window.tDuration = [];
+  window.tDuration = window.tDuration ? window.tDuration : {};
   $(opt.obj).each(function(i){
     $(this).before(opt.tpl.replace('%audioSource%',($(this).attr('src') || $(this).children('source').attr('src'))));
     var thisBox = $(this).prev('div.maudio');
     var thisAudio = thisBox.children('audio')[0];
-    $(this).remove();
-    window.tDuration[i] = setInterval(function(){
+    window.tDuration[thisAudio.src + '_' + i] = setInterval(function(){
       if(thisAudio.duration){
         thisBox.find('.time-keep .duration').text(timeFormat(thisAudio.duration));
-        clearInterval(window.tDuration);
+        clearInterval(window.tDuration[thisAudio.src + '_' + i]);
       }
     },100);
+    $(this).remove();
   });
 
   function progressBar(audio,pgp){
@@ -115,6 +115,18 @@ function maudio(_opt){
       // 同步一下本条音频的当前时间
       audioBox.find('.current-time').text(timeFormat(audio.currentTime));
     });
+    // 如果音频遇到其他操作变更按钮状态
+    $(thisWindow).find('.maudio audio').on('play', function () {
+      if (!$(this).parent('.maudio').hasClass('playing')) {
+        $(this).parent('.maudio').addClass('playing')
+      }
+    })
+    $(thisWindow).find('.maudio audio').on('pause', function () {
+      if ($(this).parent('.maudio').hasClass('playing')) {
+        $(this).parent('.maudio').removeClass('playing')
+      }
+    })
+
   }
   bindAudioCtrl();
 
