@@ -26,20 +26,24 @@ function maudio(_opt){
 
   var thisWindow = $(opt.obj).parents(window);
 
-  // 初始化所有音频
-  window.tDuration = window.tDuration ? window.tDuration : {};
-  $(opt.obj).each(function(i){
-    $(this).before(opt.tpl.replace('%audioSource%',($(this).attr('src') || $(this).children('source').attr('src'))));
-    var thisBox = $(this).prev('div.maudio');
-    var thisAudio = thisBox.children('audio')[0];
-    window.tDuration[thisAudio.src + '_' + i] = setInterval(function(){
-      if(thisAudio.duration){
-        thisBox.find('.time-keep .duration').text(timeFormat(thisAudio.duration));
-        clearInterval(window.tDuration[thisAudio.src + '_' + i]);
-      }
-    },100);
-    $(this).remove();
-  });
+  // 如果样式已经初始化，只要初始化事件
+  if (!$(opt.obj).parent('.maudio').length || !$(opt.obj).next('div.audio-control').length) {
+    // 初始化所有音频
+    window.tDuration = window.tDuration ? window.tDuration : {};
+    $(opt.obj).each(function(i){
+      $(this).before(opt.tpl.replace('%audioSource%',($(this).attr('src') || $(this).children('source').attr('src'))));
+      var thisBox = $(this).prev('div.maudio');
+      var thisAudio = thisBox.children('audio')[0];
+      window.tDuration[thisAudio.src + '_' + i] = setInterval(function(){
+        if(thisAudio.duration){
+          thisBox.find('.time-keep .duration').text(timeFormat(thisAudio.duration));
+          clearInterval(window.tDuration[thisAudio.src + '_' + i]);
+        }
+      },100);
+      $(this).remove();
+    });
+  }
+
 
   function progressBar(audio,pgp){
     var p = 100*currentAudio.currentTime/currentAudio.duration;
@@ -55,6 +59,7 @@ function maudio(_opt){
 
   function bindAudioCtrl(){
     // 播放
+    $(thisWindow).find('.audio-control .play').off('click')
     $(thisWindow).find('.audio-control .play').on('click', function(){
       var audioBox = $(this).parent('.audio-control').parent('.maudio');
       var audio = audioBox.children('audio')[0];
@@ -78,14 +83,17 @@ function maudio(_opt){
       }
     });
     // 快进
+    $(thisWindow).find('.audio-control .fast-reverse').off('click')
     $(thisWindow).find('.audio-control .fast-reverse').on('click', function(){
       currentAudio.currentTime -= opt.fastStep;
     });
     // 快退
+    $(thisWindow).find('.audio-control .fast-forward').off('click')
     $(thisWindow).find('.audio-control .fast-forward').on('click', function(){
       currentAudio.currentTime += opt.fastStep;
     });
     // 音量
+    $(thisWindow).find('.audio-control .volume-bar').off('click')
     $(thisWindow).find('.audio-control .volume-bar').on('click', function(e){
       var audioBox = $(this).parent('.audio-control').parent('.maudio');
       var audio = audioBox.children('audio')[0];
@@ -94,6 +102,7 @@ function maudio(_opt){
       audio.volume = p > 1 ? 1 : p;
     });
     // 静音
+    $(thisWindow).find('.audio-control .mute').off('click')
     $(thisWindow).find('.audio-control .mute').on('click', function(e){
       var audioBox = $(this).parent('.audio-control').parent('.maudio');
       var audio = audioBox.children('audio')[0];
@@ -106,6 +115,7 @@ function maudio(_opt){
       }
     });
     // 进度条
+    $(thisWindow).find('.audio-control .progress-bar').off('click')
     $(thisWindow).find('.audio-control .progress-bar').on('click', function(e){
       var audioBox = $(this).parent('.audio-control').parent('.maudio');
       var audio = audioBox.children('audio')[0];
@@ -116,11 +126,13 @@ function maudio(_opt){
       audioBox.find('.current-time').text(timeFormat(audio.currentTime));
     });
     // 如果音频遇到其他操作变更按钮状态
+    $(thisWindow).find('.maudio audio').off('play')
     $(thisWindow).find('.maudio audio').on('play', function () {
       if (!$(this).parent('.maudio').hasClass('playing')) {
         $(this).parent('.maudio').addClass('playing')
       }
     })
+    $(thisWindow).find('.maudio audio').off('pause')
     $(thisWindow).find('.maudio audio').on('pause', function () {
       if ($(this).parent('.maudio').hasClass('playing')) {
         $(this).parent('.maudio').removeClass('playing')
