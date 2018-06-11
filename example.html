@@ -2,22 +2,52 @@
 <html xmlns='http://www.w3.org/1999/xhtml'>
 <head>
 <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-<title>mAudio</title>
-<link rel="stylesheet" type="text/css" href="./css/maudio-mini.css">
+  <title>mAudio</title>
+  <link rel="stylesheet" type="text/css" href="./css/maudio.css">
 </head>
 <body>
 
-<audio src="https://mycugb.com/17ing/music/17ing_biyebushuozaijian.mp3"></audio>
-<audio src="https://mycugb.com/17ing/music/yc_yixin_yunkaiwusan.mp3"></audio>
-<audio src="https://mycugb.com/17ing/music/17ing_20130508.mp3"></audio>
+<div id="app"></div>
 
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script src="./js/maudio.js"></script>
 <script>
-    maudio({
-        obj:'audio', // 需要初始化的audio标签，可以使用jQuery选择器，默认值 'audio'，即所有的auido标签
-        fastStep:10 // 快进、快退每次跳跃的秒数，默认值 10
-    });
+
+// var h = '<audio controls src="./audio-test-01.mp3" autoplay="autoplay"></audio><audio controls src="https://mycugb.com/17ing/music/yc_yixin_yunkaiwusan.mp3"></audio><audio controls src="https://mycugb.com/17ing/music/17ing_20130508.mp3"></audio>'
+var h = '<audio controls src="./audio-test-01.mp3"></audio>'
+
+$('#app').html(h)
+
+maudio({
+    obj:'audio', // 需要初始化的audio标签，可以使用jQuery选择器，默认值 'audio'，即所有的auido标签
+    fastStep:10 // 快进、快退每次跳跃的秒数，默认值 10
+})
+
+$('audio').on('abort',function(){console.log('abort: 当音频/视频的加载已放弃时触发。')})
+$('audio').on('canplay',function(){console.log('canplay: 当浏览器可以开始播放音频/视频时触发。')})
+$('audio').on('canplaythrough',function(){console.log('canplaythrough: 当浏览器可在不因缓冲而停顿的情况下进行播放时触发。')})
+$('audio').on('durationchange',function(){console.log('durationchange: 当音频/视频的时长已更改时触发。')})
+$('audio').on('emptied',function(){console.log('emptied: 当目前的播放列表为空时触发。')})
+$('audio').on('ended',function(){console.log('ended')})
+$('audio').on('error',function(){console.log('error')})
+$('audio').on('loadeddata',function(){console.log('loadeddata: 当浏览器已加载音频/视频的当前帧时触发。')})
+$('audio').on('loadedmetadata',function(){console.log('loadedmetadata: 当浏览器已加载音频/视频的元数据时触发。')})
+$('audio').on('loadstart',function(){console.log('loadstart: 当浏览器开始查找音频/视频时触发。')})
+$('audio').on('pause',function(){console.log('pause: 当音频/视频已暂停时触发。')})
+$('audio').on('play',function(){console.log('play: 当音频/视频已开始或不再暂停时触发。')})
+$('audio').on('playing',function(){console.log('playing: 当音频/视频在因缓冲而暂停或停止后已就绪时触发。')})
+$('audio').on('progress',function(){console.log('progress: 当浏览器正在下载音频/视频时触发。')})
+$('audio').on('ratechange',function(){console.log('ratechange')})
+$('audio').on('seeked',function(){console.log('seeked')})
+$('audio').on('seeking',function(){console.log('seeking')})
+$('audio').on('stalled',function(){console.log('stalled')})
+$('audio').on('suspend',function(){console.log('suspend: 当浏览器刻意不获取媒体数据时触发。')})
+$('audio').on('timeupdate',function(){console.log('timeupdate: 当目前的播放位置已更改时触发。')})
+$('audio').on('volumechange',function(){console.log('volumechange')})
+$('audio').on('waiting',function(){console.log('waiting')})
+
+
+// $('audio')[0].play()
 </script>
 </body>
 </html>

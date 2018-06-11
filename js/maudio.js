@@ -5,7 +5,7 @@ function maudio(_opt){
   }
   opt.tpl = '\
     <div class="maudio">\
-      <audio src="%audioSource%" initaudio="false"></audio>\
+      <audio src="" initaudio="false"></audio>\
       <div class="audio-control">\
           <a href="javascript:;" class="fast-reverse"></a>\
           <a href="javascript:;" class="play"></a>\
@@ -21,39 +21,40 @@ function maudio(_opt){
               <div class="volume-pass"></div>\
           </div>\
       </div>\
-    </div>';
-  // var currentAudio,currentAudioBox;
+    </div>'
+  // var currentAudio,currentAudioBox
 
-  var thisWindow = $(opt.obj).parents(window);
+  var thisWindow = $(opt.obj).parents(window)
 
   // 如果样式已经初始化，只要初始化事件
   if (!$(opt.obj).parent('.maudio').length || !$(opt.obj).next('div.audio-control').length) {
     // 初始化所有音频
-    window.tDuration = window.tDuration ? window.tDuration : {};
+    window.tDuration = window.tDuration ? window.tDuration : {}
     $(opt.obj).each(function(i){
-      $(this).before(opt.tpl.replace('%audioSource%',($(this).attr('src') || $(this).children('source').attr('src'))));
-      var thisBox = $(this).prev('div.maudio');
-      var thisAudio = thisBox.children('audio')[0];
+      $(this).before(opt.tpl)
+      var thisBox = $(this).prev('div.maudio')
+      var thisAudio = thisBox.children('audio')[0]
+      thisAudio.src = $(this).attr('src') || $(this).children('source').attr('src')
       window.tDuration[thisAudio.src + '_' + i] = setInterval(function(){
         if(thisAudio.duration){
-          thisBox.find('.time-keep .duration').text(timeFormat(thisAudio.duration));
-          clearInterval(window.tDuration[thisAudio.src + '_' + i]);
+          thisBox.find('.time-keep .duration').text(timeFormat(thisAudio.duration))
+          clearInterval(window.tDuration[thisAudio.src + '_' + i])
         }
-      },100);
-      $(this).remove();
-    });
+      },100)
+      $(this).remove()
+    })
   }
 
 
   function progressBar(audio,pgp){
-    var p = 100*currentAudio.currentTime/currentAudio.duration;
-    currentAudioBox.find('.progress-pass').css({'width':p + '%'});
+    var p = 100*currentAudio.currentTime/currentAudio.duration
+    currentAudioBox.find('.progress-pass').css({'width':p + '%'})
     // 计算当前时间
-    currentAudioBox.find('.current-time').text(timeFormat(currentAudio.currentTime));
+    currentAudioBox.find('.current-time').text(timeFormat(currentAudio.currentTime))
     // 播放结束
     if(currentAudio.currentTime >= currentAudio.duration){
-      currentAudioBox.removeClass('playing');
-      clearInterval(t);
+      currentAudioBox.removeClass('playing')
+      clearInterval(t)
     }
   }
 
@@ -61,70 +62,70 @@ function maudio(_opt){
     // 播放
     $(thisWindow).find('.audio-control .play').off('click')
     $(thisWindow).find('.audio-control .play').on('click', function(){
-      var audioBox = $(this).parent('.audio-control').parent('.maudio');
-      var audio = audioBox.children('audio')[0];
+      var audioBox = $(this).parent('.audio-control').parent('.maudio')
+      var audio = audioBox.children('audio')[0]
       if(audioBox.hasClass('playing')){
-        audio.pause();
-        audioBox.removeClass('playing');
+        audio.pause()
+        audioBox.removeClass('playing')
       }else{
         // 停止其他语音播放
         $(thisWindow).find('.playing').each(function(){
-          $(this).children('audio')[0].pause();
-          $(this).removeClass('playing');
-        });
-        audio.play();
-        audioBox.addClass('playing');
-        currentAudio = audio;
-        currentAudioBox = audioBox;
+          $(this).children('audio')[0].pause()
+          $(this).removeClass('playing')
+        })
+        audio.play()
+        audioBox.addClass('playing')
+        currentAudio = audio
+        currentAudioBox = audioBox
         // 进度条
         window.t = window.setInterval(function(){
-          progressBar();
-        },500);
+          progressBar()
+        },500)
       }
-    });
+    })
     // 快进
     $(thisWindow).find('.audio-control .fast-reverse').off('click')
     $(thisWindow).find('.audio-control .fast-reverse').on('click', function(){
-      currentAudio.currentTime -= opt.fastStep;
-    });
+      currentAudio.currentTime -= opt.fastStep
+    })
     // 快退
     $(thisWindow).find('.audio-control .fast-forward').off('click')
     $(thisWindow).find('.audio-control .fast-forward').on('click', function(){
-      currentAudio.currentTime += opt.fastStep;
-    });
+      currentAudio.currentTime += opt.fastStep
+    })
     // 音量
     $(thisWindow).find('.audio-control .volume-bar').off('click')
     $(thisWindow).find('.audio-control .volume-bar').on('click', function(e){
-      var audioBox = $(this).parent('.audio-control').parent('.maudio');
-      var audio = audioBox.children('audio')[0];
-      var p = e.offsetX / audioBox.find('.volume-bar').width();
-      audioBox.find('.volume-pass').css({"width":p * 100 + '%'});
-      audio.volume = p > 1 ? 1 : p;
-    });
+      var audioBox = $(this).parent('.audio-control').parent('.maudio')
+      var audio = audioBox.children('audio')[0]
+      var p = e.offsetX / audioBox.find('.volume-bar').width()
+      audioBox.find('.volume-pass').css({"width":p * 100 + '%'})
+      audio.volume = p > 1 ? 1 : p
+    })
     // 静音
     $(thisWindow).find('.audio-control .mute').off('click')
     $(thisWindow).find('.audio-control .mute').on('click', function(e){
-      var audioBox = $(this).parent('.audio-control').parent('.maudio');
-      var audio = audioBox.children('audio')[0];
+      var audioBox = $(this).parent('.audio-control').parent('.maudio')
+      var audio = audioBox.children('audio')[0]
       if($(this).hasClass('muted')){
-        audio.muted = false;
-        $(this).removeClass('muted');
+        audio.muted = false
+        $(this).removeClass('muted')
       }else{
-        audio.muted = true;
-        $(this).addClass('muted');
+        audio.muted = true
+        $(this).addClass('muted')
       }
-    });
+    })
     // 进度条
     $(thisWindow).find('.audio-control .progress-bar').off('click')
     $(thisWindow).find('.audio-control .progress-bar').on('click', function(e){
-      var audioBox = $(this).parent('.audio-control').parent('.maudio');
-      var audio = audioBox.children('audio')[0];
-      var p = e.offsetX / audioBox.find('.progress-bar').width();
-      audioBox.find('.progress-pass').css({"width":p * 100 + '%'});
-      audio.currentTime = audio.duration * p;
+      var audioBox = $(this).parent('.audio-control').parent('.maudio')
+      var audio = audioBox.children('audio')[0]
+      var p = e.offsetX / audioBox.find('.progress-bar').width()
+      audioBox.find('.progress-pass').css({"width":p * 100 + '%'})
+      audio.currentTime = audio.duration * p
       // 同步一下本条音频的当前时间
-      audioBox.find('.current-time').text(timeFormat(audio.currentTime));
-    });
+      audioBox.find('.current-time').text(timeFormat(audio.currentTime))
+    })
     // 如果音频遇到其他操作变更按钮状态
     $(thisWindow).find('.maudio audio').off('play')
     $(thisWindow).find('.maudio audio').on('play', function () {
@@ -140,12 +141,12 @@ function maudio(_opt){
     })
 
   }
-  bindAudioCtrl();
+  bindAudioCtrl()
 
   // 时间换算成“00:00”格式
   function timeFormat(sec){
-    var m = parseInt(sec/60);
-    var s = parseInt(sec%60);
-    return (m < 10 ?  '0' + m : m)+ ':' + (s < 10 ?  '0' + s : s);
+    var m = parseInt(sec/60)
+    var s = parseInt(sec%60)
+    return (m < 10 ?  '0' + m : m)+ ':' + (s < 10 ?  '0' + s : s)
   }
 }
