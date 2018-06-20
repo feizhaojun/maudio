@@ -3,6 +3,7 @@ function maudio(_opt){
     obj : _opt.obj ? _opt.obj : 'audio',
     fastStep : _opt.fastStep ? _opt.fastStep : 10
   }
+  console.log(opt)
   opt.tpl = '\
     <div class="maudio">\
       <audio src="" initaudio="false"></audio>\
@@ -35,10 +36,10 @@ function maudio(_opt){
       var thisBox = $(this).prev('div.maudio')
       var thisAudio = thisBox.children('audio')[0]
       thisAudio.src = $(this).attr('src') || $(this).children('source').attr('src')
-      window.tDuration[thisAudio.src + '_' + i] = setInterval(function(){
+      window.tDuration[opt.obj + thisAudio.src + '_' + i] = setInterval(function(){
         if(thisAudio.duration){
           thisBox.find('.time-keep .duration').text(timeFormat(thisAudio.duration))
-          clearInterval(window.tDuration[thisAudio.src + '_' + i])
+          clearInterval(window.tDuration[opt.obj + thisAudio.src + '_' + i])
         }
       },100)
       $(this).remove()
