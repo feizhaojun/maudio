@@ -3,7 +3,6 @@ function maudio(_opt){
     obj : _opt.obj ? _opt.obj : 'audio',
     fastStep : _opt.fastStep ? _opt.fastStep : 10
   }
-  console.log(opt)
   opt.tpl = '\
     <div class="maudio">\
       <audio src="" initaudio="false"></audio>\
